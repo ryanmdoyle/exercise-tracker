@@ -18,7 +18,29 @@ const client = new MongoClient(url);
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/views/index.html')
   
-  const logDocs = function (db, callback)
+  const findDocuments = function(db, callback) {
+    // Get the documents collection
+    const collection = db.collection('workouts');
+    // Find some documents
+    collection.find({}).toArray(function(err, docs) {
+      assert.equal(err, null);
+      console.log("Found the following records");
+      console.log(docs)
+      callback(docs);
+  });
+ }
+  
+ client.connect((err) => {
+   assert.equal(null, err);
+   console.log("Connected correctly to server");
+
+   const db = client.db(dbName);
+   
+   findDocuments(dbName, function(data) {
+     console.log(data);
+   })
+ })
+ 
 });
 
 app.post("/api/exercise/new-user", (req, res) => {
