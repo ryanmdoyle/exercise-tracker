@@ -17,7 +17,13 @@ const client = new MongoClient(url);
 
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/views/index.html')
+  
+  const logDocs = function (db, callback)
 });
+
+app.post("/api/exercise/new-user", (req, res) => {
+  
+})
 
 
 // Not found middleware
