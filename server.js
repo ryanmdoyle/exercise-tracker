@@ -1,19 +1,20 @@
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
-
 const cors = require('cors')
 
-const mongoose = require('mongoose')
-mongoose.connect(process.env.MLAB_URI || 'mongodb://localhost/exercise-track' )
-
 app.use(cors())
-
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
-
-
 app.use(express.static('public'))
+
+const MongoClient = require('mongodb').MongoClient;
+const assert = require('assert');
+const dbName = "fcc-exercisetracker";
+const url = process.env.SRVADDRESS;
+const client = new MongoClient(url);
+
+
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/views/index.html')
 });
