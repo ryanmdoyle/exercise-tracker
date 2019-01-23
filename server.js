@@ -14,14 +14,16 @@ mongoose.connect(process.env.SRVADDRESS, { useNewUrlParser: true } )
 
 const userSchema = new Schema({
   username: String,
+  exercises: [{
+    type: Schema.Types.ObjectId, 
+    ref: 'Exercise',}]
 })
 
 const User = mongoose.model('User', userSchema)
 
 const exerciseSchema = Schema({
   userId: { 
-    type: Schema.Types.ObjectId, 
-    ref: 'User',
+    type: String,
     required: true
   },
   description: {
@@ -61,7 +63,7 @@ app.get('/', (req, res) => {
 
 app.get('/api/exercise/users', async (req, res) => {
   const users = await User.find({});
-  res.json(users)
+  res.json(users);
 })
 
 
@@ -70,6 +72,15 @@ app.post('/api/exercise/new-user', async (req, res) => {
   res.json(user);
 })
 
+app.post('/api/exercise/add', async (req, res) => { ///////////////////////////////// START FIXING THIS
+  const exercise = await new Exercise({
+    userId: req.body.userId,
+    description: req.body.description,
+    duration: req.body.duration,
+    date: req.body.date || Date.now
+    }).save();
+  res.send(exercise);
+})
 
 
 
