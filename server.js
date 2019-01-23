@@ -108,22 +108,27 @@ app.get('/api/exercise/log/:user', async (req, res) => {
   const user = await User.findById(req.params.user).populate('exercises'); 
   
   const to  = moment(req.query.to) || moment(); // set to current day if no entry
-  const from  = moment(req.query.from) || moment(0); // set to 1970 if no from
+  const from  = req.query.from; // set to 1970 if no from
   const limit  = req.query.limit;
   const totalExercise = user.exercises.length;
-  const array = user.exercises.filter((exercise) => {
-    return moment(exercise.date) > to && moment(exercise.date) < from;  ///////////// finish filter query here
+  
+  const newArr = [...user.exercises]
+  
+  const array = newArr.filter((exercise) => {
+    return (moment(exercise.date) > from);  ///////////// finish filter query here
   })
+  
+  
   
 
   const response = {
     userId: user._id,
-    testDate: to,
+    to: to,
+    from: from,
     username: user.username,
     exercises: user.exercises,
     totalExercises: totalExercise,
-    array: array,
-    momentZero: moment(0)
+    array: array
   }
   res.json(response)
 })
