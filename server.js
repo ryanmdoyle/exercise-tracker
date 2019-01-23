@@ -105,10 +105,10 @@ app.post('/api/exercise/add', async (req, res) => { ////////////////////////////
 })
 
 app.get('/api/exercise/log/:user', async (req, res) => {
-  const user = await User.findById(req.params.user).populate('exercises');  //All data from users with all exercises
+  const user = await User.findById(req.params.user).populate('exercises'); 
   
-  const to  = moment(req.query.to);
-  const from  = moment(req.query.from);
+  const to  = moment(req.query.to) || moment(); // set to current day if no entry
+  const from  = moment(req.query.from) || moment(0); // set to 1970 if no from
   const limit  = req.query.limit;
   const totalExercise = user.exercises.length;
   const array = user.exercises.filter((exercise) => {
@@ -122,11 +122,13 @@ app.get('/api/exercise/log/:user', async (req, res) => {
     username: user.username,
     exercises: user.exercises,
     totalExercises: totalExercise,
-    array: array
+    array: array,
+    momentZero: moment(0)
   }
   res.json(response)
 })
 
+// user 
 
 
 
