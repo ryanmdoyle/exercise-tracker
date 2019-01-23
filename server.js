@@ -8,44 +8,13 @@ app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
 app.use(express.static('public'))
 
-const MongoClient = require('mongodb').MongoClient;
-const assert = require('assert');
-const dbName = "fcc-exercisetracker";
-const url = process.env.SRVADDRESS;
-const client = new MongoClient(url);
+const mongoose = require('mongoose');
+mongoose.connect(process.env.SRVADDRESS)
 
-
-app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/views/index.html')
-  
-  const findDocuments = function(db, callback) {
-    // Get the documents collection
-    const collection = db.collection('workouts');
-    // Find some documents
-    collection.find({}).toArray(function(err, docs) {
-      assert.equal(err, null);
-      console.log("Found the following records");
-      console.log(docs)
-      callback(docs);
-  });
- }
-  
- client.connect((err) => {
-   assert.equal(null, err);
-   console.log("Connected correctly to server");
-
-   const db = client.db(dbName);
-   
-   findDocuments(dbName, function(data) {
-     console.log(data);
-   })
- })
- 
-});
-
-app.post("/api/exercise/new-user", (req, res) => {
+const User = new mongoose.Schema({
   
 })
+
 
 
 // Not found middleware
