@@ -94,7 +94,12 @@ app.post('/api/exercise/add', async (req, res) => { ////////////////////////////
     date: req.body.date // if no date entered, the presave in mongoose will input date
   }
   const exercise = await new Exercise(theExercise).save();
-  user.set({exercises})
+  
+  const newUser = await User.findOneAndUpdate(
+    { _id: req.body.userId },
+    { '$addToSet' : { exercises: exercise._id } },
+    { new: true }
+  )
   res.json(exercise);
 })
 
