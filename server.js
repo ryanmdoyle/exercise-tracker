@@ -103,21 +103,16 @@ app.post('/api/exercise/add', async (req, res) => { ////////////////////////////
   res.json(exercise);
 })
 
-app.get('/api/exercise/log/', async (req, res) => {
+app.get('/api/exercise/log/:user', async (req, res) => {
+  const user = await User.findById(req.params.user).populate('exercises');  //All data from users with all exercises
   
-  const userId = req.query.userId
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  const user = await User.findById(req.params.user).populate('exercises');
+  const to  = req.query.to;
+  const from  = req.query.from;
+  const limit  = req.query.limit;
   const totalExercise = user.exercises.length;
+  
+  if (limit) 
+  
   const response = {
     user, 
     totalExercises: totalExercise
