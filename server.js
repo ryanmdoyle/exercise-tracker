@@ -112,7 +112,7 @@ app.get('/api/exercise/log/:user', async (req, res) => {
   const limit  = req.query.limit;
   const totalExercise = user.exercises.length;
   const array = user.exercises.filter((exercise) => {
-    return moment(exercise.date) > to                ///////////// finish filter query here
+    return moment(exercise.date) > to && moment(exercise.date) < from;  ///////////// finish filter query here
   })
   
 
