@@ -12,10 +12,11 @@
     "mongodb": "^3.1.11",
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",
-    "shortid": "^2.2.14"
+    "shortid": "^2.2.14",
+    "node": "^11.7.0"
   },
   "engines": {
-    "node": "6.9.1"
+    "node": "10.15.0"
   },
   "repository": {
     "url": "https://gomix.com/#!/project/welcome-project"

@@ -6,13 +6,35 @@ const cors = require('cors')
 
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
-mongoose.connect(process.env.SRVADDRESS || 'mongodb://localhost/exercise-track' )
+mongoose.connect(process.env.SRVADDRESS, { useNewUrlParser: true } )
 
 const userSchema = new Schema({
   username: String,
 })
 
 const User = mongoose.model('User', userSchema)
+
+const exerciseSchema = Schema({
+  userId: { 
+    type: Schema.Types.ObjectId, 
+    ref: 'User',
+    required: true
+  },
+  description: {
+    type: String,
+    required: true
+  },
+  duration: {
+    type: Number,
+    required: true
+  },
+  date: {
+    type: Date,
+    default: Date.now
+  }
+})
+
+const Exercise = 
 
 app.use(cors())
 
@@ -30,8 +52,8 @@ app.get('/', (req, res) => {
 });
 
 
-app.post('/api/exercise/new-user', (req, res) => {
-  const user = new User({username: req.body.username}).save()
+app.post('/api/exercise/new-user', async (req, res) => {
+  const user = await new User({username: req.body.username}).save()
   res.json({user})
 })
 
