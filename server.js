@@ -115,8 +115,14 @@ app.get('/api/exercise/log/:user', async (req, res) => {
   let exercises = user.exercises.filter((exercise) => {
     const exerciseDate = moment(exercise.date);
     if (to) {
-      exercise.date
+      exerciseDate >= to;
+      return false;
     }
+    if (from) {
+      exerciseDate <= from;
+      return false;
+    }
+    return true;
   })
 
   const response = {
