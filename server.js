@@ -106,54 +106,22 @@ app.post('/api/exercise/add', async (req, res) => { ////////////////////////////
 app.get('/api/exercise/log/:user', async (req, res) => {
   const user = await User.findById(req.params.user).populate('exercises');  //All data from users with all exercises
   
-  const to  = req.query.to;
+  const to  = Date.parse(req.query.to);
   const from  = req.query.from;
   const limit  = req.query.limit;
   const totalExercise = user.exercises.length;
   
-  // const exercises = await Exercise.find({ userId: req.params.user })
-  
-  if (limit) {
-    if (to && from ) {
-      const exercises = await Exercise.find({ userId: req.params.user }).where('exercises').gte(Date.parse(from)).lte(Date.parse(to)).limit(limit);
-    } else if (to) {
-      const exercises = await Exercise.find({ userId: req.params.user }).where('exercises').lte(Date.parse(to)).limit(limit);
-    }  else if (from) {
-      const exercises = await Exercise.find({ userId: req.params.user }).where('exercises').gte(Date.parse(from)).limit(limit);
-    } else {
-      const exercises = await Exercise.find({ userId: req.params.user }).where('exercises').limit(limit);
-    }
-  } else {
-    if (to && from ) {
-      const exercises = await Exercise.find({ userId: req.params.user }).where('exercises').gte(Date.parse(from)).lte(Date.parse(to))
-    } else if (to) {
-      const exercises = await Exercise.find({ userId: req.params.user }).where('exercises').lte(Date.parse(to))
-    }  else if (from) {
-      const exercises = await Exercise.find({ userId: req.params.user }).where('exercises').gte(Date.parse(from))
-    } else {
-      const exercises = await Exercise.find({ userId: req.params.user })
-    }
-  }
-  
+  let exercises;
+
   const response = {
     userId: user._id,
+    test: to,
     username: user.username,
+    exercises: user.exercises,
     totalExercises: totalExercise
   }
   res.json(response)
 })
-
-app.get()
-
-
-
-
-
-
-
-
-
-
 
 
 // Not found middleware
