@@ -104,8 +104,13 @@ app.post('/api/exercise/add', async (req, res) => { ////////////////////////////
 })
 
 app.get('/api/exercise/log/:user', async (req, res) => {
-  const user = await User.findById(req.params.user); //.populate('exercises');
-  res.json(user)
+  const user = await User.findById(req.params.user).populate('exercises');
+  const totalExercise = user.exercises.length;
+  const response = {
+    user, 
+    totalExercises: totalExercise
+  }
+  res.json(response)
 })
 
 
