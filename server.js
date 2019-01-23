@@ -40,6 +40,13 @@ const exerciseSchema = Schema({
   }
 })
 
+exerciseSchema.pre('save', async function(next) {
+  if (this.date === null) {
+    this.date = await Date.now();
+  }
+  next();
+});
+
 const Exercise = mongoose.model('Exercise', exerciseSchema)
 
 
@@ -73,13 +80,21 @@ app.post('/api/exercise/new-user', async (req, res) => {
 })
 
 app.post('/api/exercise/add', async (req, res) => { ///////////////////////////////// START FIXING THIS
-  const exercise = await new Exercise({
+  let date;
+  
+  if (!req.body.date) {
+    date = Date.now;
+  }
+  
+  const theExercise = {
     userId: req.body.userId,
     description: req.body.description,
     duration: req.body.duration,
-    date: req.body.date || Date.now
-    }).save();
-  res.send(exercise);
+    date: date
+  }
+  
+  // const exercise = await new Exercise().save();
+  res.send(theExercise);
 })
 
 
