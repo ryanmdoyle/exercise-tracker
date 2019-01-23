@@ -5,10 +5,14 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 
 const mongoose = require('mongoose')
+const Schema = mongoose.Schema;
 mongoose.connect(process.env.SRVADDRESS || 'mongodb://localhost/exercise-track' )
 
-const User = new mongoose.Schema({
+const userSchema = new Schema({
+  username: String,
 })
+
+const User = mongoose.model('User', userSchema)
 
 app.use(cors())
 
@@ -18,13 +22,17 @@ app.use(bodyParser.json())
 
 app.use(express.static('public'))
 
+
+
+
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/views/index.html')
 });
 
 
-app.post('/api/exercise/new-user', async (req, res) => {
-  
+app.post('/api/exercise/new-user', (req, res) => {
+  const user = new User({username: req.body.username}).save()
+  res.json({user})
 })
 
 
