@@ -23,7 +23,7 @@ const User = mongoose.model('User', userSchema)
 
 const exerciseSchema = Schema({
   userId: { 
-    type: Schema.Typs.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: 'User',
     required: true
   },
@@ -81,7 +81,11 @@ app.post('/api/exercise/new-user', async (req, res) => {
 })
 
 app.post('/api/exercise/add', async (req, res) => { ///////////////////////////////// START FIXING THIS
-  const user = 
+  const user = await User.findById(req.body.userId);
+  if (!user) {
+    res.send("No user exists with that id!");
+    return;
+  }
   
   const theExercise = {
     userId: req.body.userId,
@@ -90,7 +94,8 @@ app.post('/api/exercise/add', async (req, res) => { ////////////////////////////
     date: req.body.date // if no date entered, the presave in mongoose will input date
   }
   const exercise = await new Exercise(theExercise).save();
-  res.send(exercise);
+  user.set({exercises})
+  res.json(exercise);
 })
 
 app.get('/api/exercise/log/:user', async (req, res) => {
