@@ -111,26 +111,18 @@ app.get('/api/exercise/log/:user', async (req, res) => {
   const from  = moment(req.query.from);
   const limit  = req.query.limit;
   const totalExercise = user.exercises.length;
-  
-  let exercises = user.exercises.filter((exercise) => {
-    const exerciseDate = moment(exercise.date);
-    if (to) {
-      exerciseDate >= to;
-      return false;
-    }
-    if (from) {
-      exerciseDate <= from;
-      return false;
-    }
-    return true;
+  const array = user.exercises.filter((exercise) => {
+    return moment(exercise.date) > to                ///////////// finish filter query here
   })
+  
 
   const response = {
     userId: user._id,
-    test: to,
+    testDate: to,
     username: user.username,
     exercises: user.exercises,
-    totalExercises: totalExercise
+    totalExercises: totalExercise,
+    array: array
   }
   res.json(response)
 })
