@@ -4,6 +4,10 @@ const bodyParser = require('body-parser')
 
 const cors = require('cors')
 
+////////////////////////////////
+//////// MONGO DB ///////////////
+
+
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
 mongoose.connect(process.env.SRVADDRESS, { useNewUrlParser: true } )
@@ -34,7 +38,10 @@ const exerciseSchema = Schema({
   }
 })
 
-const Exercise = 
+const Exercise = mongoose.model('Exercise', exerciseSchema)
+
+
+//// SOME MIDDLEWARES ///////////
 
 app.use(cors())
 
@@ -44,18 +51,37 @@ app.use(bodyParser.json())
 
 app.use(express.static('public'))
 
-
+////////////////////////////////
+//////// ROUTES ///////////////
 
 
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/views/index.html')
 });
 
+app.get('/api/exercise/users', async (req, res) => {
+  const users = await User.find({});
+  res.json(users)
+})
+
 
 app.post('/api/exercise/new-user', async (req, res) => {
   const user = await new User({username: req.body.username}).save()
-  res.json({user})
+  res.json(user);
 })
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 // Not found middleware
