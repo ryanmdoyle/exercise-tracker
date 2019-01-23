@@ -111,7 +111,21 @@ app.get('/api/exercise/log/:user', async (req, res) => {
   const limit  = req.query.limit;
   const totalExercise = user.exercises.length;
   
-  if (limit) 
+  const exercises = await Exercise.find({ userId: req.params.user })
+  
+  if (limit) {
+    if (to && from ) {
+      onst exercises = await Exercise.find({ userId: req.params.user }).where()
+    } else if (to) {
+      
+    }  else if (from) {
+      
+    } else {
+    
+    }
+  } else {
+    
+  }
   
   const response = {
     user, 
