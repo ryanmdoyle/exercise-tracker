@@ -107,16 +107,18 @@ app.post('/api/exercise/add', async (req, res) => { ////////////////////////////
 app.get('/api/exercise/log/:user', async (req, res) => {
   const user = await User.findById(req.params.user).populate('exercises'); 
   
-  const to  = moment(req.query.to) || moment(); // set to current day if no entry
-  const from  = req.query.from; // set to 1970 if no from
+  const to  = req.query.to || moment().format(); // set to current day if no entry
+  const from  = req.query.from || moment(1990).format(); // set to 1970 if no from
   const limit  = req.query.limit;
   const totalExercise = user.exercises.length;
   
-  const newArr = [...user.exercises]
+//   const newArr = [...user.exercises]
   
-  const array = newArr.filter((exercise) => {
-    return (moment(exercise.date) > from);  ///////////// finish filter query here
-  })
+//   const array = newArr.filter((exercise) => {
+//     if (!from) { from = moment('1990-01-01').format() }
+//     if (!to) { to = moment().format() }
+//     return (moment(exercise.date) > from);  ///////////// finish filter query here
+//   })
   
   
   
@@ -127,8 +129,7 @@ app.get('/api/exercise/log/:user', async (req, res) => {
     from: from,
     username: user.username,
     exercises: user.exercises,
-    totalExercises: totalExercise,
-    array: array
+    totalExercises: totalExercise
   }
   res.json(response)
 })
