@@ -23,7 +23,8 @@ const User = mongoose.model('User', userSchema)
 
 const exerciseSchema = Schema({
   userId: { 
-    type: String,
+    type: Schema.Typs.ObjectId,
+    ref: 'User',
     required: true
   },
   description: {
@@ -80,24 +81,22 @@ app.post('/api/exercise/new-user', async (req, res) => {
 })
 
 app.post('/api/exercise/add', async (req, res) => { ///////////////////////////////// START FIXING THIS
-  let date;
-  
-  if (!req.body.date) {
-    date = Date.now;
-  }
+  const user = 
   
   const theExercise = {
     userId: req.body.userId,
     description: req.body.description,
     duration: req.body.duration,
-    date: date
+    date: req.body.date // if no date entered, the presave in mongoose will input date
   }
-  
-  // const exercise = await new Exercise().save();
-  res.send(theExercise);
+  const exercise = await new Exercise(theExercise).save();
+  res.send(exercise);
 })
 
-
+app.get('/api/exercise/log/:user', async (req, res) => {
+  const user = await User.findById(req.params.user); //.populate('exercises');
+  res.json(user)
+})
 
 
 
