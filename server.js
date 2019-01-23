@@ -1,6 +1,7 @@
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
+const moment = require('moment')
 
 const cors = require('cors')
 
@@ -106,12 +107,17 @@ app.post('/api/exercise/add', async (req, res) => { ////////////////////////////
 app.get('/api/exercise/log/:user', async (req, res) => {
   const user = await User.findById(req.params.user).populate('exercises');  //All data from users with all exercises
   
-  const to  = Date.parse(req.query.to);
-  const from  = req.query.from;
+  const to  = moment(req.query.to);
+  const from  = moment(req.query.from);
   const limit  = req.query.limit;
   const totalExercise = user.exercises.length;
   
-  let exercises;
+  let exercises = user.exercises.filter((exercise) => {
+    const exerciseDate = moment(exercise.date);
+    if (to) {
+      exercise.date
+    }
+  })
 
   const response = {
     userId: user._id,
@@ -122,6 +128,15 @@ app.get('/api/exercise/log/:user', async (req, res) => {
   }
   res.json(response)
 })
+
+
+
+
+
+
+
+
+
 
 
 // Not found middleware
