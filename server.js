@@ -109,22 +109,25 @@ app.get('/api/exercise/log/:user', async (req, res) => {
   
   const to  = req.query.to || moment().format(); // set to current day if no entry
   const from  = req.query.from || moment(0).format(); // set to 1970 if no from
-  const limit  = req.query.limit;
   const totalExercise = user.exercises.length;
+  let exercises;
   
-  const exercises = await Exercise.find({ userId: req.params.user }).where('date').gte(from).lte(to)
-  
-  if (limit) {
-    exercises.limit(limit)
+  if (req.query.limit) {
+    exercises = await Exercise.find({ userId: req.params.user }, '_id description duration date')
+      .where('date')
+      .gte(from)
+      .lte(to)
+      .limit(parseInt(req.query.limit))
+  } else {
+    exercises = await Exercise.find({ userId: req.params.user }, '_id description duration date')
+      .where('date')
+      .gte(from)
+      .lte(to)
   }
-  
 
   const response = {
     userId: user._id,
-    to: to,
-    from: from,
     username: user.username,
-    userexercises: user.exercises,
     totalExercises: totalExercise,
     exercises: exercises
   }
