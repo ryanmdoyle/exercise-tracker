@@ -8,7 +8,6 @@ const cors = require('cors')
 ////////////////////////////////
 //////// MONGO DB ///////////////
 
-
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
 mongoose.connect(process.env.SRVADDRESS, { useNewUrlParser: true } )
@@ -51,7 +50,6 @@ exerciseSchema.pre('save', async function(next) {
 
 const Exercise = mongoose.model('Exercise', exerciseSchema)
 
-
 //// SOME MIDDLEWARES ///////////
 
 app.use(cors())
@@ -64,7 +62,6 @@ app.use(express.static('public'))
 
 ////////////////////////////////
 //////// ROUTES ///////////////
-
 
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/views/index.html')
@@ -133,17 +130,6 @@ app.get('/api/exercise/log/:user', async (req, res) => {
   }
   res.json(response)
 })
-
-// user 
-
-
-
-
-
-
-
-
-
 
 // Not found middleware
 app.use((req, res, next) => {
