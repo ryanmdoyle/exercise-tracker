@@ -71,7 +71,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/api/exercise/users', async (req, res) => {
-  const users = await User.find({});
+  const users = await User.find({}, 'username _id');
   res.json(users);
 })
 
@@ -109,12 +109,14 @@ app.get('/api/exercise/log/:user', async (req, res) => {
   
   const to  = req.query.to || moment().format(); // set to current day if no entry
   const from  = req.query.from || moment(0).format(); // set to 1970 if no from
-  const limit  = req.query.limit || null;
+  const limit  = req.query.limit;
   const totalExercise = user.exercises.length;
   
-  const exercises = await Exercise.find({ userId: req.body._id, exercises: { } })
+  const exercises = await Exercise.find({ userId: req.params.user }).where('date').gte(from).lte(to)
   
-  
+  if (limit) {
+    exercises.limit(limit)
+  }
   
 
   const response = {
@@ -122,8 +124,9 @@ app.get('/api/exercise/log/:user', async (req, res) => {
     to: to,
     from: from,
     username: user.username,
-    exercises: user.exercises,
-    totalExercises: totalExercise
+    userexercises: user.exercises,
+    totalExercises: totalExercise,
+    exercises: exercises
   }
   res.json(response)
 })
