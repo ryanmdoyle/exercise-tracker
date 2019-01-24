@@ -109,16 +109,10 @@ app.get('/api/exercise/log/:user', async (req, res) => {
   
   const to  = req.query.to || moment().format(); // set to current day if no entry
   const from  = req.query.from || moment(0).format(); // set to 1970 if no from
-  const limit  = req.query.limit;
+  const limit  = req.query.limit || null;
   const totalExercise = user.exercises.length;
   
-//   const newArr = [...user.exercises] ///////////////////////////////////////////////////////////// start here
-  
-//   const array = newArr.filter((exercise) => {
-//     if (!from) { from = moment('1990-01-01').format() }
-//     if (!to) { to = moment().format() }
-//     return (moment(exercise.date) > from);  ///////////// finish filter query here
-//   })
+  const exercises = await Exercise.find({ userId: req.body._id, exercises: { } })
   
   
   
